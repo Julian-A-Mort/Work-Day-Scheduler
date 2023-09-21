@@ -1,13 +1,10 @@
 
 
-currentDayElement.textContent = currentDate;
-
-
-// current time //
+// current date //
 $(function () {
   var currentDay = dayjs().format("dddd, MMMM D, YYYY");
-  var currentDayElement = document.getElementById("currentDay")
-  currentDayElement.textContent(currentDay);
+  var currentDayElement = $("#currentDay");
+  currentDayElement.text(currentDay);
 });
 
 // save button event listener //
@@ -17,6 +14,31 @@ $(".saveBtn").on("click", function () {
   var timeBlockId = $(this).parent().attr("id");
 
   localStorage.setItem(timeBlockId, userDescription);
+});
+
+// add past future present class //
+$(".time-block").each(function () {
+  var hour = parseInt($(this).attr("id").split("-")[1]);
+  var currentHour = dayjs().hour();
+
+  if (currentHour > hour) {
+    $(this).addClass("past");
+  } else if (currentHour === hour) {
+    $(this).addClass("present");
+  } else {
+    $(this).addClass("future");
+  }
+});
+
+// Bring up saved local data //
+$(".time-block").each(function () {
+  var timeBlockId = $(this).attr("id");
+  var userDescription = localStorage.getItem(timeBlockId);
+  var textarea = $(this).find(".description");
+
+  if (userDescription !== null) {
+    textarea.val(userDescription);
+  }
 });
 
 
